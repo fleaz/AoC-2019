@@ -24,3 +24,20 @@ func TestCalculateFuel(t *testing.T) {
 	}
 
 }
+
+func TestComplexCalculateFuel(t *testing.T) {
+	pairs := []testpair{
+		{14, 2},
+		{1969, 966},
+		{100756, 50346},
+	}
+
+	for _, p := range pairs {
+		isFuel := complexCalculateFuel(p.mass)
+		if isFuel != p.wantFuel {
+			t.Errorf("Wanted %d fuel for mass %d but got %d", p.wantFuel, p.mass, isFuel)
+		}
+
+	}
+
+}

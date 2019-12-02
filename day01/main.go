@@ -13,6 +13,20 @@ func calculateFuel(mass int) int {
 	return int(fuel)
 }
 
+func complexCalculateFuel(mass int) int {
+	totalFuel := 0
+	for {
+		f := calculateFuel(mass)
+		if f > 0 {
+			totalFuel += f
+			mass = f
+		} else {
+			return totalFuel
+		}
+
+	}
+}
+
 func main() {
 	totalFuel := 0
 
@@ -22,7 +36,7 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		m, _ := strconv.Atoi(scanner.Text())
-		totalFuel += calculateFuel(m)
+		totalFuel += complexCalculateFuel(m)
 	}
 
 	fmt.Printf("Total fuel consumtion is %d\n", totalFuel)
