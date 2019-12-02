@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"strings"
+	"testing"
+)
 
 type testpair struct {
 	prog       string
@@ -16,7 +20,8 @@ func TestExecute(t *testing.T) {
 	}
 
 	for _, p := range pairs {
-		isResult := execute(p.prog)
+		res, _ := execute(format(p.prog))
+		isResult := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(res)), ","), "[]")
 		if isResult != p.wantResult {
 			t.Errorf("Wanted %q but got %q", p.wantResult, isResult)
 		}
