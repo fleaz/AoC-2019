@@ -29,6 +29,7 @@ func complexCalculateFuel(mass int) int {
 
 func main() {
 	totalFuel := 0
+	totalComplexFuel := 0
 
 	file, _ := os.Open("input.txt")
 	defer file.Close()
@@ -36,9 +37,11 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		m, _ := strconv.Atoi(scanner.Text())
-		totalFuel += complexCalculateFuel(m)
+		totalFuel += calculateFuel(m)
+		totalComplexFuel += complexCalculateFuel(m)
 	}
 
-	fmt.Printf("Total fuel consumtion is %d\n", totalFuel)
+	fmt.Printf("Solution for part 1 is %d\n", totalFuel)
+	fmt.Printf("Solution for part 2 is %d\n", totalComplexFuel)
 
 }
