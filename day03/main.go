@@ -9,8 +9,9 @@ import (
 )
 
 type Coordinate struct {
-	X int
-	Y int
+	X     int
+	Y     int
+	Steps int
 }
 
 func abs(x int) int {
@@ -35,21 +36,25 @@ func visitedBy(start Coordinate, movement []string) []Coordinate {
 		case 'U':
 			for i := 0; i < distance; i++ {
 				pos.Y += 1
+				pos.Steps += 1
 				visited = append(visited, pos)
 			}
 		case 'D':
 			for i := 0; i < distance; i++ {
 				pos.Y -= 1
+				pos.Steps += 1
 				visited = append(visited, pos)
 			}
 		case 'L':
 			for i := 0; i < distance; i++ {
 				pos.X -= 1
+				pos.Steps += 1
 				visited = append(visited, pos)
 			}
 		case 'R':
 			for i := 0; i < distance; i++ {
 				pos.X += 1
+				pos.Steps += 1
 				visited = append(visited, pos)
 			}
 		}
@@ -75,15 +80,28 @@ func findDuplicates(left, right []Coordinate) []Coordinate {
 	return dups
 }
 
+func findDuplicates2(left, right []Coordinate) []int {
+	var dups []int
+	for _, a := range left {
+		for _, b := range right {
+			if same(a, b) {
+				dups = append(dups, a.Steps+b.Steps)
+			}
+		}
+	}
+	return dups
+}
+
 func calculateDistance(wire1 []string, wire2 []string) int {
 	var occupied1, occupied2 []Coordinate
 	start := Coordinate{X: 0, Y: 0}
 
 	// occupied by wire1
 	occupied1 = visitedBy(start, wire1)
-	// occupied by wire2
 
+	// occupied by wire2
 	occupied2 = visitedBy(start, wire2)
+
 	// find duplicates
 	crosses := findDuplicates(occupied1, occupied2)
 
@@ -96,7 +114,24 @@ func calculateDistance(wire1 []string, wire2 []string) int {
 	// return smallest
 	sort.Ints(distances)
 	return distances[0]
+}
 
+func calculateSteps(wire1 []string, wire2 []string) int {
+	var occupied1, occupied2 []Coordinate
+	start := Coordinate{X: 0, Y: 0}
+
+	// occupied by wire1
+	occupied1 = visitedBy(start, wire1)
+
+	// occupied by wire2
+	occupied2 = visitedBy(start, wire2)
+
+	// find stepCount for all duplicates
+	crosses := findDuplicates2(occupied1, occupied2)
+
+	// return smallest
+	sort.Ints(crosses)
+	return crosses[0]
 }
 
 func main() {
@@ -107,5 +142,8 @@ func main() {
 
 	distance := calculateDistance(wire1, wire2)
 	fmt.Printf("Solution to part 1 is %d\n", distance)
+
+	steps := calculateSteps(wire1, wire2)
+	fmt.Printf("Solution to part 2 is %d\n", steps)
 
 }
